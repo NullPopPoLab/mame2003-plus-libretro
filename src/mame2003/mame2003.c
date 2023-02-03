@@ -1477,7 +1477,7 @@ const struct KeyboardInfo *osd_get_key_list(void)
 int osd_is_key_pressed(int keycode)
 {
   if (!retro_running)                                  return 0; /* input callback has not yet been polled */
-  if (options.input_interface == RETRO_DEVICE_JOYPAD)  return 0; /* core option is set to retropad/joystick only */
+/*  if (options.input_interface == RETRO_DEVICE_JOYPAD)  return 0; /* core option is set to retropad/joystick only */
 
   if (keycode < RETROK_LAST && keycode >= 0)
     return input_cb(0, RETRO_DEVICE_KEYBOARD, 0, keycode);
