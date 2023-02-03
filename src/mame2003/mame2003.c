@@ -1153,9 +1153,9 @@ unsigned get_ctrl_ipt_code(unsigned player_number, unsigned standard_code)
 #define EMIT_JOYSTICK_OPTIONS(DISPLAY_IDX)      \
   {                                             \
     { EMIT_RETROPAD_CLASSIC(DISPLAY_IDX)    },     \
-    { EMIT_RETROPAD_FIGHTSTICK(DISPLAY_IDX) },     \
-    { EMIT_RETROPAD_8BUTTON(DISPLAY_IDX)    },     \
-    { EMIT_RETROPAD_6BUTTON(DISPLAY_IDX)    },     \
+   /* { EMIT_RETROPAD_FIGHTSTICK(DISPLAY_IDX) }, */    \
+   /* { EMIT_RETROPAD_8BUTTON(DISPLAY_IDX)    }, */    \
+   /* { EMIT_RETROPAD_6BUTTON(DISPLAY_IDX)    }, */    \
   },
 
 struct JoystickInfo alternate_joystick_maps[MAX_PLAYER_COUNT][IDX_NUMBER_OF_INPUT_TYPES][OSD_INPUT_CODES_PER_PLAYER] =
@@ -1194,9 +1194,11 @@ const struct JoystickInfo *osd_get_joy_list(void)
       {
         default:
         case PAD_CLASSIC:      layout_idx = IDX_CLASSIC;      break;
+#if 0
         case PAD_FIGHTSTICK:   layout_idx = IDX_FIGHTSTICK;   break;
         case PAD_8BUTTON:      layout_idx = IDX_8BUTTON;      break;
         case PAD_6BUTTON:      layout_idx = IDX_6BUTTON;      break;
+#endif
       }
       mame_joy_map[needle] = alternate_joystick_maps[port_number][layout_idx][osd_code];
       if(!string_is_empty(mame_joy_map[needle].name)) needle++;
