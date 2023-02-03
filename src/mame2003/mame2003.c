@@ -101,9 +101,11 @@ static void   configure_cyclone_mode (int driverIndex);
 
 const struct retro_controller_description controllers[] = {
   { "RetroPad",   PAD_CLASSIC    },
+#if 0
   { "Fightstick", PAD_FIGHTSTICK },
   { "8-Button",   PAD_8BUTTON    },
   { "6-Button",   PAD_6BUTTON    },
+#endif
 };
 
 /******************************************************************************
@@ -835,6 +837,7 @@ void retro_describe_controls(void)
             case RETRO_DEVICE_ID_JOYPAD_DOWN:   control_name = "Down";  break;
             case RETRO_DEVICE_ID_JOYPAD_SELECT: control_name = "Coin";  break;
             case RETRO_DEVICE_ID_JOYPAD_START:  control_name = "Start"; break;
+            case RETRO_DEVICE_ID_JOYPAD_MENU:   control_name = "Menu"; break;
           }
         }
       }
@@ -924,6 +927,9 @@ int get_retro_code(const char* type, unsigned osd_code)
       case  OSD_JOYPAD_R2:      return RETRO_DEVICE_ID_JOYPAD_R2;
       case  OSD_JOYPAD_L3:      return RETRO_DEVICE_ID_JOYPAD_L3;
       case  OSD_JOYPAD_R3:      return RETRO_DEVICE_ID_JOYPAD_R3;
+      case  OSD_JOYPAD_C:       return RETRO_DEVICE_ID_JOYPAD_C;
+      case  OSD_JOYPAD_Z:       return RETRO_DEVICE_ID_JOYPAD_Z;
+      case  OSD_JOYPAD_MENU:    return RETRO_DEVICE_ID_JOYPAD_MENU;
     }
   }
   else if(strcmp(type, "mouse") == 0)
@@ -1047,18 +1053,19 @@ unsigned get_ctrl_ipt_code(unsigned player_number, unsigned standard_code)
  */
 
 #define EMIT_RETROPAD_CLASSIC(DISPLAY_IDX) \
-  {"RP"  #DISPLAY_IDX " B",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_B,   JOYCODE_##DISPLAY_IDX##_BUTTON1},  \
-  {"RP"  #DISPLAY_IDX " A",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_A,   JOYCODE_##DISPLAY_IDX##_BUTTON2},  \
-  {"RP"  #DISPLAY_IDX " Y",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_Y,   JOYCODE_##DISPLAY_IDX##_BUTTON3},  \
-  {"RP"  #DISPLAY_IDX " X",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_X,   JOYCODE_##DISPLAY_IDX##_BUTTON4},  \
-  {"RP"  #DISPLAY_IDX " L",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_L,   JOYCODE_##DISPLAY_IDX##_BUTTON5},  \
-  {"RP"  #DISPLAY_IDX " R",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_R,   JOYCODE_##DISPLAY_IDX##_BUTTON6},  \
-  {"RP"  #DISPLAY_IDX " L2",  (DISPLAY_IDX * 1000) + OSD_JOYPAD_L2,  JOYCODE_##DISPLAY_IDX##_BUTTON7},  \
-  {"RP"  #DISPLAY_IDX " R2",  (DISPLAY_IDX * 1000) + OSD_JOYPAD_R2,  JOYCODE_##DISPLAY_IDX##_BUTTON8},  \
-  {"RP"  #DISPLAY_IDX " L3",  (DISPLAY_IDX * 1000) + OSD_JOYPAD_L3,  JOYCODE_##DISPLAY_IDX##_BUTTON9},  \
-  {"RP"  #DISPLAY_IDX " R3",  (DISPLAY_IDX * 1000) + OSD_JOYPAD_R3,  JOYCODE_##DISPLAY_IDX##_BUTTON10}, \
+  {"RP"  #DISPLAY_IDX " C",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_C,   JOYCODE_##DISPLAY_IDX##_BUTTON1},  \
+  {"RP"  #DISPLAY_IDX " B",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_B,   JOYCODE_##DISPLAY_IDX##_BUTTON2},  \
+  {"RP"  #DISPLAY_IDX " A",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_A,   JOYCODE_##DISPLAY_IDX##_BUTTON3},  \
+  {"RP"  #DISPLAY_IDX " Z",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_Z,   JOYCODE_##DISPLAY_IDX##_BUTTON4},  \
+  {"RP"  #DISPLAY_IDX " Y",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_Y,   JOYCODE_##DISPLAY_IDX##_BUTTON5},  \
+  {"RP"  #DISPLAY_IDX " X",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_X,   JOYCODE_##DISPLAY_IDX##_BUTTON6},  \
+  {"RP"  #DISPLAY_IDX " L",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_L,   JOYCODE_##DISPLAY_IDX##_BUTTON7},  \
+  {"RP"  #DISPLAY_IDX " R",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_R,   JOYCODE_##DISPLAY_IDX##_BUTTON8},  \
+  {"RP"  #DISPLAY_IDX " L2",  (DISPLAY_IDX * 1000) + OSD_JOYPAD_L2,  JOYCODE_##DISPLAY_IDX##_BUTTON9},  \
+  {"RP"  #DISPLAY_IDX " R2",  (DISPLAY_IDX * 1000) + OSD_JOYPAD_R2,  JOYCODE_##DISPLAY_IDX##_BUTTON10}, \
   EMIT_COMMON_CODES(DISPLAY_IDX)
 
+#if 0
 #define EMIT_RETROPAD_FIGHTSTICK(DISPLAY_IDX) \
   {"RP"  #DISPLAY_IDX " Y",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_Y,   JOYCODE_##DISPLAY_IDX##_BUTTON1},  \
   {"RP"  #DISPLAY_IDX " X",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_X,   JOYCODE_##DISPLAY_IDX##_BUTTON2},  \
@@ -1097,6 +1104,7 @@ unsigned get_ctrl_ipt_code(unsigned player_number, unsigned standard_code)
   {"RP"  #DISPLAY_IDX " L3",  (DISPLAY_IDX * 1000) + OSD_JOYPAD_L3,  JOYCODE_##DISPLAY_IDX##_BUTTON9}, \
   {"RP"  #DISPLAY_IDX " R3",  (DISPLAY_IDX * 1000) + OSD_JOYPAD_R3,  JOYCODE_##DISPLAY_IDX##_BUTTON10},\
   EMIT_COMMON_CODES(DISPLAY_IDX)
+#endif
 
 /* RetroPad-type input devices: */
 /* The dpad, start, select, mouse, and analog axes are the same regardless of layout */
@@ -1107,8 +1115,11 @@ unsigned get_ctrl_ipt_code(unsigned player_number, unsigned standard_code)
   {"RP" #DISPLAY_IDX " HAT Up",     (DISPLAY_IDX * 1000) + OSD_JOYPAD_UP,    JOYCODE_##DISPLAY_IDX##_UP},    \
   {"RP" #DISPLAY_IDX " HAT Down",   (DISPLAY_IDX * 1000) + OSD_JOYPAD_DOWN,  JOYCODE_##DISPLAY_IDX##_DOWN},  \
 \
+  {"RP" #DISPLAY_IDX " L3",         (DISPLAY_IDX * 1000) + OSD_JOYPAD_L3, JOYCODE_##DISPLAY_IDX##_CLEAR},  \
+  {"RP" #DISPLAY_IDX " R3",         (DISPLAY_IDX * 1000) + OSD_JOYPAD_R3, JOYCODE_##DISPLAY_IDX##_CANCEL}, \
   {"RP" #DISPLAY_IDX " Start",      (DISPLAY_IDX * 1000) + OSD_JOYPAD_START,  JOYCODE_##DISPLAY_IDX##_START},  \
   {"RP" #DISPLAY_IDX " Select",     (DISPLAY_IDX * 1000) + OSD_JOYPAD_SELECT, JOYCODE_##DISPLAY_IDX##_SELECT}, \
+  {"RP" #DISPLAY_IDX " Menu",       (DISPLAY_IDX * 1000) + OSD_JOYPAD_MENU, JOYCODE_##DISPLAY_IDX##_MENU}, \
 \
   {"RP" #DISPLAY_IDX " AXIS 0 X-",  (DISPLAY_IDX * 1000) + OSD_ANALOG_LEFT_NEGATIVE_X,  JOYCODE_##DISPLAY_IDX##_LEFT_LEFT},   \
   {"RP" #DISPLAY_IDX " AXIS 0 X+",  (DISPLAY_IDX * 1000) + OSD_ANALOG_LEFT_POSITIVE_X,  JOYCODE_##DISPLAY_IDX##_LEFT_RIGHT},  \
@@ -1142,9 +1153,9 @@ unsigned get_ctrl_ipt_code(unsigned player_number, unsigned standard_code)
 #define EMIT_JOYSTICK_OPTIONS(DISPLAY_IDX)      \
   {                                             \
     { EMIT_RETROPAD_CLASSIC(DISPLAY_IDX)    },     \
-    { EMIT_RETROPAD_FIGHTSTICK(DISPLAY_IDX) },     \
-    { EMIT_RETROPAD_8BUTTON(DISPLAY_IDX)    },     \
-    { EMIT_RETROPAD_6BUTTON(DISPLAY_IDX)    },     \
+   /* { EMIT_RETROPAD_FIGHTSTICK(DISPLAY_IDX) }, */    \
+   /* { EMIT_RETROPAD_8BUTTON(DISPLAY_IDX)    }, */    \
+   /* { EMIT_RETROPAD_6BUTTON(DISPLAY_IDX)    }, */    \
   },
 
 struct JoystickInfo alternate_joystick_maps[MAX_PLAYER_COUNT][IDX_NUMBER_OF_INPUT_TYPES][OSD_INPUT_CODES_PER_PLAYER] =
@@ -1181,10 +1192,13 @@ const struct JoystickInfo *osd_get_joy_list(void)
       int layout_idx   = 0;
       switch(options.active_control_type[port_number])
       {
+        default:
         case PAD_CLASSIC:      layout_idx = IDX_CLASSIC;      break;
+#if 0
         case PAD_FIGHTSTICK:   layout_idx = IDX_FIGHTSTICK;   break;
         case PAD_8BUTTON:      layout_idx = IDX_8BUTTON;      break;
         case PAD_6BUTTON:      layout_idx = IDX_6BUTTON;      break;
+#endif
       }
       mame_joy_map[needle] = alternate_joystick_maps[port_number][layout_idx][osd_code];
       if(!string_is_empty(mame_joy_map[needle].name)) needle++;
